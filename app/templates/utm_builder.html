@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Free Campaign UTM Builder & Shortener - StrixShort by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-semibold mb-3 border border-indigo-500/20">
+            <i class="fa-solid fa-bullhorn text-[11px]"></i> Marketing & Analytics Studio
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Campaign UTM Builder</h1>
+        <p class="text-xs sm:text-sm text-slate-400">
+            Standardize your campaign tracking for Google Analytics, Facebook Ads, and email newsletters. Build tagged URLs and shorten them instantly.
+        </p>
+    </div>
+
+    <div class="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl mb-8 space-y-6">
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                    Website URL <span class="text-indigo-400">*</span>
+                </label>
+                <input type="url" id="utmBaseUrl" placeholder="https://strixdevs.com/product"
+                       class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Campaign Source (utm_source) <span class="text-indigo-400">*</span></label>
+                    <input type="text" id="utmSource" placeholder="e.g. google, newsletter, twitter"
+                           class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Campaign Medium (utm_medium) <span class="text-indigo-400">*</span></label>
+                    <input type="text" id="utmMedium" placeholder="e.g. cpc, banner, email, social"
+                           class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Campaign Name (utm_campaign)</label>
+                    <input type="text" id="utmCampaign" placeholder="e.g. summer_launch_2026"
+                           class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs focus:ring-1 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Campaign Term (utm_term)</label>
+                    <input type="text" id="utmTerm" placeholder="e.g. running+shoes"
+                           class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs focus:ring-1 focus:ring-indigo-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Generated UTM Output -->
+        <div class="pt-6 border-t border-slate-800 space-y-3">
+            <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider block">Generated Campaign URL</span>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs font-mono text-emerald-400 break-all select-all" id="utmOutput">
+                Fill the fields above to see your generated UTM link.
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button type="button" id="copyUtmBtn" class="flex-1 py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-regular fa-copy"></i> Copy Full Tagged URL
+                </button>
+                <button type="button" id="shortenUtmBtn" class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/30 transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Shorten with StrixShort
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const inputs = ['utmBaseUrl', 'utmSource', 'utmMedium', 'utmCampaign', 'utmTerm'];
+    const output = document.getElementById('utmOutput');
+    const copyBtn = document.getElementById('copyUtmBtn');
+    const shortenBtn = document.getElementById('shortenUtmBtn');
+
+    function updateUtm() {
+        const base = document.getElementById('utmBaseUrl').value.trim();
+        const source = document.getElementById('utmSource').value.trim();
+        const medium = document.getElementById('utmMedium').value.trim();
+        const campaign = document.getElementById('utmCampaign').value.trim();
+        const term = document.getElementById('utmTerm').value.trim();
+
+        if (!base) {
+            output.textContent = 'Please provide a valid website base URL above.';
+            return '';
+        }
+
+        try {
+            const url = new URL(base.startsWith('http') ? base : 'https://' + base);
+            if (source) url.searchParams.set('utm_source', source);
+            if (medium) url.searchParams.set('utm_medium', medium);
+            if (campaign) url.searchParams.set('utm_campaign', campaign);
+            if (term) url.searchParams.set('utm_term', term);
+
+            const finalStr = url.toString();
+            output.textContent = finalStr;
+            return finalStr;
+        } catch (e) {
+            output.textContent = 'Invalid base URL format.';
+            return '';
+        }
+    }
+
+    inputs.forEach(id => document.getElementById(id).addEventListener('input', updateUtm));
+
+    copyBtn.addEventListener('click', async () => {
+        const str = updateUtm();
+        if (str) {
+            await navigator.clipboard.writeText(str);
+            copyBtn.textContent = 'Copied to Clipboard!';
+            setTimeout(() => copyBtn.innerHTML = '<i class="fa-regular fa-copy mr-1"></i> Copy Full Tagged URL', 2000);
+        }
+    });
+
+    shortenBtn.addEventListener('click', () => {
+        const str = updateUtm();
+        if (str) {
+            window.location.href = `/?prefill=${encodeURIComponent(str)}`;
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Log In - StrixShort by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[75vh] flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md liquid-glass p-8 sm:p-10 rounded-3xl relative overflow-hidden shadow-2xl">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-400 flex items-center justify-center mx-auto mb-4 text-slate-950 font-black shadow-lg shadow-teal-500/25">
+                <i class="fa-solid fa-arrow-right-to-bracket text-base"></i>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black text-white hover-glow-text">Welcome Back</h1>
+            <p class="text-xs text-slate-400 mt-2">Sign in to manage your branded short links and click intelligence.</p>
+        </div>
+
+        {% if error %}
+        <div class="mb-5 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        {% if success %}
+        <div class="mb-5 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span>{{ success }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="POST" action="/login" class="space-y-4">
+            <div>
+                <label for="email" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                    Email Address
+                </label>
+                <div class="relative">
+                    <input type="email" id="email" name="email" required placeholder="name@company.com"
+                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:border-teal-400/60 focus:bg-white/10 transition backdrop-blur-sm">
+                    <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                        <i class="fa-regular fa-envelope text-xs"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-1.5">
+                    <label for="password" class="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        Password
+                    </label>
+                </div>
+                <div class="relative">
+                    <input type="password" id="password" name="password" required placeholder="••••••••"
+                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-500 focus:outline-none focus:border-teal-400/60 focus:bg-white/10 transition backdrop-blur-sm">
+                    <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-black text-sm shadow-lg shadow-teal-500/20 btn-shimmer flex items-center justify-center gap-2 mt-2">
+                <span>Sign In</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </form>
+
+        <div class="mt-6 pt-6 border-t border-white/10 text-center">
+            <p class="text-xs text-slate-400">
+                Don't have an account yet? 
+                <a href="/register" class="text-teal-400 hover:text-teal-300 font-bold hover:underline">Create Account</a>
+            </p>
+        </div>
+
+        <!-- Default Admin Tip for First-Time Setup -->
+        <div class="mt-4 p-3 rounded-xl bg-teal-500/5 border border-teal-500/10 text-[11px] text-slate-400 text-center">
+            <span class="text-teal-400 font-bold block mb-0.5">Admin Demo Credentials:</span>
+            <span>admin@strixshort.com • Password: admin123456</span>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

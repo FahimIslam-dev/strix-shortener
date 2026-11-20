@@ -1,0 +1,31 @@
+# StrixShort by StrixDevs
+
+> StrixShort is an enterprise-grade URL shortener, QR code generator, and link analytics engine engineered by StrixDevs.
+
+## Overview
+- **Product Name:** StrixShort
+- **Developer:** StrixDevs (https://strixdevs.com)
+- **Primary Function:** High-speed URL shortening, branded slugs, vector QR code generation, campaign UTM building, and privacy-first click analytics.
+- **Redirection Architecture:** Sub-50ms HTTP 302 redirection engine, with optional AdSense-monetized Safe Transit preview pages.
+
+## Core Utilities
+- **URL Shortener:** Convert long web links into compact Base62 slugs with custom alias options.
+- **QR Code Studio:** Generate customizable, high-resolution PNG & SVG vector QR codes.
+- **UTM Builder:** Construct Google Analytics campaign tracking parameters (utm_source, utm_medium, utm_campaign, utm_term, utm_content).
+- **Link Inspector:** Safe link expansion and anti-phishing preview utility to inspect suspicious redirects without execution risk.
+- **Real-Time Analytics:** Track click count, geographical distribution, device types (Mobile/Desktop/Tablet), top browsers, and referral traffic.
+
+## API Documentation
+- `POST /api/shorten`: Shorten a URL.
+  - JSON Body:
+    - `url` (string, required): Destination target URL.
+    - `custom_slug` (string, optional): Custom 3-32 character alias.
+    - `transit_mode` (string, default "direct"): "direct" (instant 302) or "safe_transit" (ad-monetized safe preview).
+    - `password` (string, optional): Protect link with passcode.
+    - `expires_at` (string, optional): Expiration timestamp.
+- `GET /api/qr`: Generate instant QR code image with custom colors.
+- `GET /api/inspect?url=...`: Inspect destination metadata, SSL status, and final resolved URL.
+- `GET /api/analytics/{short_code}`: Retrieve JSON metrics for a short code.
+
+## Publisher & Monetization
+StrixShort supports family-friendly, Google AdSense-compliant intermediate safe transit pages. Publishers earn revenue while providing end-users with cybersecurity verification.

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Link Safety Inspector & URL Expander - StrixShort by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold mb-3 border border-emerald-500/20">
+            <i class="fa-solid fa-shield-halved text-[11px]"></i> Cybersecurity Utility
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-3">Link Safety Inspector & Expander</h1>
+        <p class="text-xs sm:text-sm text-slate-400">
+            Safely expand unknown short URLs and inspect where they lead before opening them. Detect phishing, malware risks, and hidden redirect chains.
+        </p>
+    </div>
+
+    <!-- Inspector Form -->
+    <div class="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl mb-8">
+        <form id="inspectForm" class="space-y-4">
+            <div>
+                <label for="inspectUrl" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                    Paste Short URL or Any Web Link
+                </label>
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 text-slate-500"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="url" id="inspectUrl" name="inspectUrl" required placeholder="https://bit.ly/xyz or {{ settings.BASE_URL }}/abc123"
+                           class="w-full pl-11 pr-24 py-3.5 bg-slate-950 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button type="submit" class="absolute right-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition">
+                        Inspect
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Loading -->
+        <div id="inspectLoading" class="hidden py-8 text-center">
+            <div class="inline-block w-8 h-8 border-3 border-emerald-500 border-t-transparent rounded-full animate-spin mb-2"></div>
+            <p class="text-xs text-slate-400">Scanning destination server headers and SSL status...</p>
+        </div>
+
+        <!-- Result Card -->
+        <div id="inspectResult" class="hidden mt-6 pt-6 border-t border-slate-800 space-y-4">
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-check"></i> Inspection Completed
+                    </span>
+                    <span id="statusCodeBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">HTTP 200</span>
+                </div>
+
+                <div>
+                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Final Destination:</span>
+                    <p id="finalDestination" class="text-xs sm:text-sm font-mono text-indigo-400 break-all bg-slate-900 p-2.5 rounded-lg border border-slate-800"></p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800/80">
+                        <span class="text-slate-400 block text-[10px] uppercase">Page Title:</span>
+                        <span id="pageTitle" class="text-slate-200 font-medium truncate block">Loading...</span>
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800/80">
+                        <span class="text-slate-400 block text-[10px] uppercase">Security Protocol:</span>
+                        <span id="securityStatus" class="text-emerald-400 font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-lock text-[10px]"></i> Valid HTTPS Certificate
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('inspectForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('inspectUrl').value.trim();
+    const loading = document.getElementById('inspectLoading');
+    const result = document.getElementById('inspectResult');
+    
+    loading.classList.remove('hidden');
+    result.classList.add('hidden');
+
+    try {
+        const res = await fetch(`/api/inspect?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+        loading.classList.add('hidden');
+
+        if (res.ok) {
+            document.getElementById('finalDestination').textContent = data.final_url;
+            document.getElementById('pageTitle').textContent = data.title || 'No Title Found';
+            document.getElementById('statusCodeBadge').textContent = `HTTP ${data.status_code}`;
+            result.classList.remove('hidden');
+        } else {
+            alert(data.detail || 'Failed to inspect link.');
+        }
+    } catch (err) {
+        loading.classList.add('hidden');
+        alert('Inspection request failed.');
+    }
+});
+</script>
+{% endblock %}

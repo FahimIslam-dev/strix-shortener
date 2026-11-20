@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy & Google AdSense Disclosure - StrixShort by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-6 text-slate-300 text-xs sm:text-sm leading-relaxed">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Privacy Policy & Cookie Disclosure</h1>
+        <p class="text-xs text-slate-400">Last updated: November 2026 • Operated by {{ settings.COMPANY_NAME }}</p>
+
+        <p>
+            At <strong>StrixShort</strong> (a product of <strong>{{ settings.COMPANY_NAME }}</strong>), accessible from {{ settings.BASE_URL }}, one of our main priorities is the privacy of our visitors. This Privacy Policy document outlines the types of information collected and how we use it.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-4">1. Information We Collect</h2>
+        <p>
+            When you shorten a link or click a shortened link, we may log standard server information including:
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Internet Protocol (IP) address (anonymized for analytics).</li>
+            <li>Browser type and version (User-Agent).</li>
+            <li>Referring website or channel.</li>
+            <li>Timestamp of click and redirection.</li>
+        </ul>
+
+        <h2 class="text-lg font-bold text-white pt-4">2. Google AdSense & DoubleClick DART Cookies</h2>
+        <p>
+            Google is a third-party vendor on our site. It uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to our site and other sites on the internet.
+        </p>
+        <p>
+            Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL: <a href="https://policies.google.com/technologies/ads" target="_blank" class="text-indigo-400 underline">https://policies.google.com/technologies/ads</a>.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-4">3. GDPR & CCPA Compliance</h2>
+        <p>
+            We respect European Union (GDPR) and California Consumer Privacy Act (CCPA) standards. We do not sell personal data to any third parties. You have the right to request deletion of any shortened link or associated analytical records created by you.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-4">4. Cybersecurity & Anti-Abuse</h2>
+        <p>
+            We strictly prohibit phishing, malware distribution, child exploitation, and illegal content. Links found violating our Terms will be terminated immediately without prior notice.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-4">5. Contact Information</h2>
+        <p>
+            If you have any questions or require more information about our Privacy Policy, contact the <strong>{{ settings.COMPANY_NAME }}</strong> team at: <a href="mailto:support@strixdevs.com" class="text-indigo-400 underline">support@strixdevs.com</a> or visit <a href="{{ settings.COMPANY_URL }}" class="text-indigo-400 underline" target="_blank">{{ settings.COMPANY_URL }}</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

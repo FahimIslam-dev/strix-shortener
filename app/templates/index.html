@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}StrixShort - Premium Link Intelligence Platform by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<!-- ═══ iOS 26 LIQUID GLASS HERO ═══ -->
+<section class="relative min-h-[85vh] flex items-center justify-center px-4 py-20 overflow-hidden">
+
+    <!-- Extra ambient blobs for the hero -->
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="water-blob absolute top-[10%] left-[8%] w-[120px] h-[120px] opacity-20" style="animation-delay: 0.5s;"></div>
+        <div class="water-blob absolute bottom-[15%] right-[12%] w-[90px] h-[90px] opacity-15" style="animation-delay: 1.5s;"></div>
+        <div class="water-blob absolute top-[60%] left-[70%] w-[60px] h-[60px] opacity-20" style="animation-delay: 2.5s;"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl w-full mx-auto text-center space-y-8">
+
+        <!-- Innovation Badge (Liquid Pill) -->
+        <div class="inline-flex items-center gap-2.5 px-5 py-2 rounded-full liquid-glass text-teal-300 text-xs font-bold tracking-wide">
+            <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            </span>
+            <span>StrixShort 2.0 • Built by {{ settings.COMPANY_NAME }}</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-tight">
+            Supercharge Links.<br>
+            <span class="bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-300 bg-clip-text text-transparent">
+                Amplify Reach & Revenue.
+            </span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-300/90 leading-relaxed max-w-2xl mx-auto font-light">
+            Transform ordinary URLs into high-performing branded links with real-time analytics, QR codes, and AdSense monetization.
+        </p>
+
+        <!-- ═══ Liquid Glass URL Shortener Card ═══ -->
+        <div class="liquid-glass rounded-3xl p-6 sm:p-8 max-w-2xl mx-auto text-left space-y-5">
+
+            <!-- Console Header Tabs -->
+            <div class="flex items-center gap-2 p-1 rounded-2xl bg-white/5 border border-white/5">
+                <button type="button" id="tabShortenBtn" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-extrabold text-white bg-white/10 border border-white/10 shadow-sm flex items-center justify-center gap-2 transition backdrop-blur-sm">
+                    <i class="fa-solid fa-link text-teal-400"></i>
+                    <span>Shorten URL</span>
+                </button>
+                <button type="button" id="tabQrBtn" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-extrabold text-slate-400 hover:text-white hover:bg-white/5 flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span>QR Studio</span>
+                </button>
+                <a href="/utm-builder" class="flex-1 py-2.5 px-4 rounded-xl text-xs font-extrabold text-slate-400 hover:text-white hover:bg-white/5 flex items-center justify-center gap-2 transition text-center">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span>UTM</span>
+                </a>
+            </div>
+
+            <!-- Tab 1: Shorten URL -->
+            <div id="tabShortenContent" class="space-y-4">
+                <form id="shortenForm" class="space-y-4">
+
+                    <!-- URL Input -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="longUrl" class="text-xs font-extrabold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-globe text-teal-400 text-[11px]"></i>
+                                <span>Destination URL</span>
+                                <span class="text-rose-400">*</span>
+                            </label>
+                            <button type="button" id="quickPasteBtn" class="text-[11px] font-bold text-teal-400 hover:text-teal-300 flex items-center gap-1 transition transform hover:scale-105">
+                                <i class="fa-regular fa-paste"></i> Paste
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <input type="url" id="longUrl" name="longUrl" required placeholder="https://yourwebsite.com/long-page-link"
+                                   class="w-full pl-4 pr-10 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-teal-400/50 focus:bg-white/8 transition backdrop-blur-sm">
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                                <i class="fa-solid fa-arrow-turn-down text-xs"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Custom Slug Section -->
+                    <div class="p-4 rounded-2xl bg-white/3 border border-white/5 space-y-3">
+                        <span class="text-xs font-extrabold text-slate-300 uppercase tracking-wider block">Customize Short Link (Optional)</span>
+                        <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                            <div class="sm:col-span-5">
+                                <select id="domainSelect" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-slate-200 text-xs font-bold focus:outline-none focus:border-teal-400/50 transition backdrop-blur-sm">
+                                    <option value="strixshort.com">strixshort.com</option>
+                                    <option value="strix.dev">strix.dev</option>
+                                    <option value="short.strixdevs.com">short.strixdevs.com</option>
+                                </select>
+                            </div>
+                            <div class="hidden sm:flex sm:col-span-1 items-center justify-center text-slate-500 font-bold text-lg select-none">/</div>
+                            <div class="sm:col-span-6">
+                                <input type="text" id="customSlug" placeholder="custom-slug"
+                                       class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-slate-500 text-xs font-semibold focus:outline-none focus:border-teal-400/50 transition backdrop-blur-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Options Toggle -->
+                    <div>
+                        <button type="button" id="toggleAdvOptions" class="text-xs font-extrabold text-teal-400 hover:text-teal-300 flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-sliders text-[11px]"></i>
+                            <span>Advanced Controls (Monetization, Passcode, Expiry)</span>
+                            <i class="fa-solid fa-chevron-down text-[10px] transition-transform" id="advChevron"></i>
+                        </button>
+
+                        <div id="advOptionsBox" class="hidden mt-3 p-4 rounded-2xl bg-white/3 border border-white/5 space-y-3">
+                            <div>
+                                <label class="block text-[11px] font-extrabold text-slate-300 uppercase mb-1">Transit & Monetization Mode</label>
+                                <select id="transitMode" class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-slate-200 font-medium focus:outline-none transition backdrop-blur-sm">
+                                    <option value="safe_transit" selected>💰 Safe Transit Page (AdSense Monetized & Security Scan)</option>
+                                    <option value="direct">⚡ Direct 302 Redirection (Instant)</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                                <div>
+                                    <label class="block text-[11px] font-extrabold text-slate-300 uppercase mb-1">Passcode Lock</label>
+                                    <input type="password" id="linkPassword" placeholder="Optional passcode"
+                                           class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus:outline-none transition backdrop-blur-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-extrabold text-slate-300 uppercase mb-1">Auto-Expiration</label>
+                                    <input type="datetime-local" id="expiresAt"
+                                           class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus:outline-none transition backdrop-blur-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <button type="submit" id="submitShortenBtn" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-emerald-500/80 to-teal-500/80 hover:from-emerald-400/90 hover:to-teal-400/90 text-white font-black text-base shadow-xl shadow-emerald-600/20 btn-shimmer flex items-center justify-center gap-2 backdrop-blur-md">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                        <span>Generate Short Link</span>
+                    </button>
+
+                    <p class="text-[11px] text-slate-500 text-center leading-normal">
+                        By shortening, you accept our 
+                        <a href="/terms" class="text-teal-400 font-bold hover:underline">Terms</a>, 
+                        <a href="/privacy" class="text-teal-400 font-bold hover:underline">Privacy Policy</a> & 
+                        <a href="/privacy" class="text-teal-400 font-bold hover:underline">Cookies Policy</a>.
+                    </p>
+                </form>
+
+                <!-- Loading Spinner -->
+                <div id="shortenLoading" class="hidden py-8 text-center">
+                    <div class="inline-block w-9 h-9 border-3 border-teal-400 border-t-transparent rounded-full animate-spin mb-2"></div>
+                    <p class="text-xs text-slate-300 font-extrabold">Engineering Short Link & Vector QR...</p>
+                </div>
+
+                <!-- Error Box -->
+                <div id="shortenError" class="hidden mt-4 p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 text-xs font-bold backdrop-blur-sm"></div>
+
+                <!-- Result Card -->
+                <div id="resultContainer" class="hidden mt-6 p-5 liquid-glass rounded-2xl space-y-4" style="border-color: rgba(20,184,166,0.2);">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-black text-teal-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i> Link Ready!
+                        </span>
+                        <span id="badgeMode" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 uppercase border border-emerald-500/20">Monetized</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="shortUrlDisplay" readonly
+                               class="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-xl text-teal-300 font-mono text-sm font-black select-all focus:outline-none backdrop-blur-sm">
+                        <button type="button" id="copyResultBtn" class="px-5 py-2.5 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 text-xs font-black transition border border-teal-500/20 backdrop-blur-sm">
+                            Copy
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <a id="btnAnalytics" href="#" class="py-2.5 px-2 liquid-glass rounded-xl font-bold text-slate-200 transition flex items-center justify-center gap-1 hover:text-teal-300">
+                            <i class="fa-solid fa-chart-pie text-teal-400"></i> Analytics
+                        </a>
+                        <a id="btnPreview" href="#" target="_blank" class="py-2.5 px-2 liquid-glass rounded-xl font-bold text-slate-200 transition flex items-center justify-center gap-1 hover:text-emerald-300">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i> Preview
+                        </a>
+                        <a id="btnDownloadQr" href="#" download="strix_qr.png" class="py-2.5 px-2 liquid-glass rounded-xl font-bold text-slate-200 transition flex items-center justify-center gap-1 hover:text-purple-300">
+                            <i class="fa-solid fa-qrcode text-purple-400"></i> QR Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Quick QR Studio -->
+            <div id="tabQrContent" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-extrabold text-slate-200 uppercase mb-1.5">Enter URL or Content for QR Code</label>
+                    <input type="text" id="quickQrText" placeholder="https://example.com" value="https://strixdevs.com"
+                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm focus:outline-none focus:border-teal-400/50 transition backdrop-blur-sm">
+                </div>
+                <div class="flex items-center justify-center p-6 liquid-glass rounded-2xl">
+                    <img id="quickQrImg" src="/api/qr?text=https://strixdevs.com" alt="QR Code" class="w-44 h-44 rounded-xl shadow-md">
+                </div>
+                <div class="flex gap-2">
+                    <a id="quickQrDownloadBtn" href="/api/qr?text=https://strixdevs.com" download="strix_qr.png" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-500/80 to-teal-500/80 text-white font-extrabold text-xs text-center transition btn-shimmer backdrop-blur-md border border-white/10">
+                        <i class="fa-solid fa-download mr-1"></i> Download High-Res PNG
+                    </a>
+                    <a href="/qr-generator" class="py-3 px-4 rounded-xl liquid-glass text-white font-extrabold text-xs text-center transition hover:bg-white/10">
+                        Open Studio
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Quick Action Links -->
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-4">
+            <a href="/plans" class="glass-nav-pill text-xs font-bold text-slate-300 hover:text-teal-300 flex items-center gap-2 transition">
+                <i class="fa-solid fa-crown text-amber-400"></i> Explore Free Pro Plan
+            </a>
+            <a href="/inspector" class="glass-nav-pill text-xs font-bold text-slate-300 hover:text-emerald-300 flex items-center gap-2 transition">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> Link Inspector
+            </a>
+            <a href="/qr-generator" class="glass-nav-pill text-xs font-bold text-slate-300 hover:text-purple-300 flex items-center gap-2 transition">
+                <i class="fa-solid fa-qrcode text-purple-400"></i> QR Studio
+            </a>
+        </div>
+
+        <!-- Live Metrics Strip (Liquid Glass) -->
+        <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto pt-8">
+            <div class="liquid-glass rounded-2xl p-4 text-center">
+                <span class="block text-2xl font-black text-white font-mono">35ms</span>
+                <span class="text-[10px] text-slate-400 font-medium">Avg Redirect Speed</span>
+            </div>
+            <div class="liquid-glass rounded-2xl p-4 text-center">
+                <span class="block text-2xl font-black text-emerald-400 font-mono">100% Free</span>
+                <span class="text-[10px] text-slate-400 font-medium">Pro Features Tier</span>
+            </div>
+            <div class="liquid-glass rounded-2xl p-4 text-center">
+                <span class="block text-2xl font-black text-teal-400 font-mono">AdSense</span>
+                <span class="text-[10px] text-slate-400 font-medium">Policy Compliant</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══ iOS 26 Liquid Glass Feature Cards ═══ -->
+<section id="features" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full liquid-glass text-teal-300 text-xs font-bold tracking-wide mb-4">
+                Enterprise Intelligence Engine
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-black text-white mt-2 hover-glow-text">Engineered for Performance & Scale</h2>
+            <p class="text-sm text-slate-300/80 mt-3">Everything you need to shorten, brand, protect, and monetize link clicks.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-xl mb-4 border border-teal-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Base62 Instant Engine</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Cryptographically secure integer encoding with zero collisions and sub-35ms redirection.</p>
+            </div>
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 border border-emerald-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Safe Transit & AdSense Monetization</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Google Publisher compliant interstitial security scan page earning high-CTR revenue.</p>
+            </div>
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4 border border-purple-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Real-Time Click Intelligence</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Track devices (mobile/desktop), browsers, operating systems, countries, and referrers.</p>
+            </div>
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-xl mb-4 border border-pink-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Vector QR Code Studio</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Generate print-ready vector PNG and SVG QR codes with custom color palettes.</p>
+            </div>
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 border border-amber-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-shield-virus"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Anti-Phishing & Link Inspector</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Preview destination metadata and SSL authenticity before clicking unknown links.</p>
+            </div>
+            <div class="p-7 rounded-3xl hover-lift">
+                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-4 border border-cyan-500/15 backdrop-blur-sm">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3 class="text-base font-bold text-white mb-2">Campaign UTM Builder</h3>
+                <p class="text-xs text-slate-300/80 leading-relaxed">Build Google Analytics UTM parameters and shorten them in a single click.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Tabs switcher
+    const tabShortenBtn = document.getElementById('tabShortenBtn');
+    const tabQrBtn = document.getElementById('tabQrBtn');
+    const tabShortenContent = document.getElementById('tabShortenContent');
+    const tabQrContent = document.getElementById('tabQrContent');
+
+    tabShortenBtn.addEventListener('click', () => {
+        tabShortenBtn.classList.add('bg-white/10', 'text-white', 'shadow-sm', 'border-white/10');
+        tabShortenBtn.classList.remove('text-slate-400');
+        tabQrBtn.classList.remove('bg-white/10', 'text-white', 'shadow-sm', 'border-white/10');
+        tabQrBtn.classList.add('text-slate-400');
+        tabShortenContent.classList.remove('hidden');
+        tabQrContent.classList.add('hidden');
+    });
+
+    tabQrBtn.addEventListener('click', () => {
+        tabQrBtn.classList.add('bg-white/10', 'text-white', 'shadow-sm', 'border-white/10');
+        tabQrBtn.classList.remove('text-slate-400');
+        tabShortenBtn.classList.remove('bg-white/10', 'text-white', 'shadow-sm', 'border-white/10');
+        tabShortenBtn.classList.add('text-slate-400');
+        tabQrContent.classList.remove('hidden');
+        tabShortenContent.classList.add('hidden');
+    });
+
+    // Quick QR Generator tab
+    const quickQrText = document.getElementById('quickQrText');
+    const quickQrImg = document.getElementById('quickQrImg');
+    const quickQrDownloadBtn = document.getElementById('quickQrDownloadBtn');
+
+    quickQrText.addEventListener('input', () => {
+        const txt = encodeURIComponent(quickQrText.value.trim() || 'https://strixdevs.com');
+        const url = `/api/qr?text=${txt}`;
+        quickQrImg.src = url;
+        quickQrDownloadBtn.href = url;
+    });
+
+    // Advanced options toggle
+    const toggleAdvOptions = document.getElementById('toggleAdvOptions');
+    const advOptionsBox = document.getElementById('advOptionsBox');
+    const advChevron = document.getElementById('advChevron');
+    toggleAdvOptions.addEventListener('click', () => {
+        advOptionsBox.classList.toggle('hidden');
+        advChevron.classList.toggle('rotate-180');
+    });
+
+    // Quick paste
+    const quickPasteBtn = document.getElementById('quickPasteBtn');
+    const longUrlInput = document.getElementById('longUrl');
+    quickPasteBtn.addEventListener('click', async () => {
+        try {
+            const txt = await navigator.clipboard.readText();
+            if (txt) {
+                longUrlInput.value = txt;
+                longUrlInput.focus();
+            }
+        } catch(e) {
+            longUrlInput.focus();
+        }
+    });
+
+    // Local Storage Recent Links
+    function loadRecentLinks() {
+        // No recent links panel on this page version
+    }
+
+    loadRecentLinks();
+
+    // Shorten Form Submit
+    const shortenForm = document.getElementById('shortenForm');
+    const shortenLoading = document.getElementById('shortenLoading');
+    const shortenError = document.getElementById('shortenError');
+    const resultContainer = document.getElementById('resultContainer');
+    const submitShortenBtn = document.getElementById('submitShortenBtn');
+
+    shortenForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        shortenError.classList.add('hidden');
+        resultContainer.classList.add('hidden');
+        shortenLoading.classList.remove('hidden');
+        submitShortenBtn.disabled = true;
+
+        const payload = {
+            url: longUrlInput.value.trim(),
+            custom_slug: document.getElementById('customSlug').value.trim() || null,
+            transit_mode: document.getElementById('transitMode').value,
+            password: document.getElementById('linkPassword').value || null,
+            expires_at: document.getElementById('expiresAt').value || null
+        };
+
+        try {
+            const res = await fetch('/api/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            shortenLoading.classList.add('hidden');
+            submitShortenBtn.disabled = false;
+
+            if (!res.ok) {
+                shortenError.textContent = data.detail || 'Could not shorten link.';
+                shortenError.classList.remove('hidden');
+                return;
+            }
+
+            // Populate Result
+            document.getElementById('shortUrlDisplay').value = data.short_url;
+            document.getElementById('btnAnalytics').href = `/analytics/${data.short_code}`;
+            document.getElementById('btnPreview').href = `/safe/${data.short_code}`;
+            document.getElementById('btnDownloadQr').href = data.qr_code_base64;
+            document.getElementById('badgeMode').textContent = data.transit_mode === 'safe_transit' ? 'Ad Monetized' : 'Direct 302';
+
+            resultContainer.classList.remove('hidden');
+
+            // Save to Local History
+            const history = JSON.parse(localStorage.getItem('strix_recent_links') || '[]');
+            history.unshift({
+                short_code: data.short_code,
+                short_url: data.short_url,
+                long_url: data.long_url
+            });
+            localStorage.setItem('strix_recent_links', JSON.stringify(history));
+
+        } catch (err) {
+            shortenLoading.classList.add('hidden');
+            submitShortenBtn.disabled = false;
+            shortenError.textContent = 'Server connection error. Please try again.';
+            shortenError.classList.remove('hidden');
+        }
+    });
+
+    // Copy Result
+    document.getElementById('copyResultBtn').addEventListener('click', async () => {
+        const input = document.getElementById('shortUrlDisplay');
+        try {
+            await navigator.clipboard.writeText(input.value);
+            document.getElementById('copyResultBtn').textContent = 'Copied!';
+            setTimeout(() => document.getElementById('copyResultBtn').textContent = 'Copy', 2000);
+        } catch(e) {
+            input.select();
+        }
+    });
+});
+</script>
+{% endblock %}

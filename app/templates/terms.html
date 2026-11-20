@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Terms of Service - StrixShort by {{ settings.COMPANY_NAME }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="p-8 sm:p-12 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-6 text-slate-300 text-xs sm:text-sm leading-relaxed">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Terms of Service</h1>
+        <p class="text-xs text-slate-400">Effective Date: November 2026 • Published by {{ settings.COMPANY_NAME }}</p>
+
+        <p>
+            Welcome to <strong>StrixShort</strong>. By accessing or using our URL shortener, QR generator, or link analytics tools, you agree to be bound by these Terms of Service.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-2">1. Acceptable Use Policy</h2>
+        <p>You agree NOT to use StrixShort to shorten or distribute links that contain:</p>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Phishing schemes, credential harvesting, or deceptive login pages.</li>
+            <li>Malware, viruses, ransomware, or malicious executables.</li>
+            <li>Spam, unsolicited automated bulk messaging, or pyramid schemes.</li>
+            <li>Infringing copyright materials or illegal activities under applicable laws.</li>
+        </ul>
+
+        <h2 class="text-lg font-bold text-white pt-2">2. Service Availability & Termination</h2>
+        <p>
+            {{ settings.COMPANY_NAME }} reserves the right to disable, suspend, or delete any shortened link or user access at our sole discretion, without liability, if any malicious or abusive activity is detected.
+        </p>
+
+        <h2 class="text-lg font-bold text-white pt-2">3. Disclaimer of Warranties</h2>
+        <p>
+            The services are provided "AS IS" and "AS AVAILABLE" without warranties of any kind. While we aim for 99.99% uptime, StrixDevs does not guarantee uninterrupted operational availability.
+        </p>
+    </div>
+</div>
+{% endblock %}
