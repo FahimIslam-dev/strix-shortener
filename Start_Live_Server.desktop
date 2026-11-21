@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=View Live Website
+Comment=Launch StrixShort server and open live in browser
+Exec=/home/fahim/strix-shortener/launch_live.sh
+Icon=applications-internet
+Terminal=false
+Categories=Network;WebBrowser;
+StartupNotify=true
