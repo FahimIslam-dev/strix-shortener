@@ -68,12 +68,22 @@ TEMPLATES_DIR = os.path.join(os.path.dirname(__file__), "templates")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
+def get_base_url(request: Request) -> str:
+    """Resolve the active base URL from BASE_URL env var or incoming request headers."""
+    env_base = os.getenv("BASE_URL", "").strip().rstrip("/")
+    if env_base:
+        return env_base
+    proto = request.headers.get("x-forwarded-proto", request.url.scheme).split(",")[0].strip()
+    host = request.headers.get("x-forwarded-host", request.headers.get("host", request.url.netloc)).split(",")[0].strip()
+    return f"{proto}://{host}".rstrip("/")
+
 # Context processor for templates
 def template_context(request: Request, extra: dict = None) -> dict:
     current_user = get_current_user_optional(request)
+    req_settings = settings.model_copy(update={"BASE_URL": get_base_url(request)})
     ctx = {
         "request": request,
-        "settings": settings,
+        "settings": req_settings,
         "now_year": datetime.now().year,
         "user": current_user
     }
@@ -360,7 +370,7 @@ async def api_shorten(request: Request, req: ShortenRequest):
         user_id=user_id
     )
     
-    short_url = f"{settings.BASE_URL}/{short_code}"
+    short_url = f"{get_base_url(request)}/{short_code}"
     qr_b64 = generate_qr_base64(short_url)
     
     return {
@@ -416,7 +426,7 @@ async def api_qr(text: str = "https://strixdevs.com", fg: str = "#0f172a", bg: s
     return Response(content=buf.getvalue(), media_type="image/png")
 
 @app.get("/api/inspect")
-async def api_inspect(url: str):
+async def api_inspect(request: Request, url: str):
     clean_url = url.strip()
     if not clean_url.startswith(("http://", "https://")):
         clean_url = "https://" + clean_url
@@ -425,7 +435,7 @@ async def api_inspect(url: str):
         raise HTTPException(status_code=400, detail="Invalid target URL.")
 
     # Check if this is an internal short URL
-    parsed_base = settings.BASE_URL.replace("http://", "").replace("https://", "")
+    parsed_base = get_base_url(request).replace("http://", "").replace("https://", "")
     if parsed_base in clean_url:
         code = clean_url.rstrip("/").split("/")[-1]
         local = get_url_by_code(code)
@@ -469,7 +479,8 @@ async def api_inspect(url: str):
 # ----------------- SEO & LLM Specifications -----------------
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
-async def robots_txt():
+async def robots_txt(request: Request):
+    base_url = get_base_url(request)
     return f"""User-agent: *
 Allow: /
 Allow: /qr-generator
@@ -493,7 +504,7 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: {settings.BASE_URL}/sitemap.xml
+Sitemap: {base_url}/sitemap.xml
 """
 
 @app.get("/llms.txt", response_class=PlainTextResponse)
@@ -505,54 +516,55 @@ async def llms_txt():
     return "StrixShort - Link Intelligence by StrixDevs"
 
 @app.get("/sitemap.xml", response_class=Response)
-async def sitemap_xml():
+async def sitemap_xml(request: Request):
+    base_url = get_base_url(request)
     today = datetime.now().strftime("%Y-%m-%d")
     xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>{settings.BASE_URL}/</loc>
+    <loc>{base_url}/</loc>
     <lastmod>{today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/qr-generator</loc>
+    <loc>{base_url}/qr-generator</loc>
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/utm-builder</loc>
+    <loc>{base_url}/utm-builder</loc>
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/inspector</loc>
+    <loc>{base_url}/inspector</loc>
     <lastmod>{today}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/about</loc>
+    <loc>{base_url}/about</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/privacy</loc>
+    <loc>{base_url}/privacy</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/terms</loc>
+    <loc>{base_url}/terms</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>{settings.BASE_URL}/dmca</loc>
+    <loc>{base_url}/dmca</loc>
     <lastmod>{today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
