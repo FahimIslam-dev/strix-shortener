@@ -9,7 +9,7 @@ class Settings(BaseModel):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "strixdevs_super_secure_key_2026")
     
     # Google AdSense Configuration
-    ADSENSE_CLIENT_ID: str = os.getenv("ADSENSE_CLIENT_ID", "ca-pub-XXXXXXXXXXXXXXXX")
+    ADSENSE_CLIENT_ID: str = os.getenv("ADSENSE_CLIENT_ID", "ca-pub-1322334760239264")
     ADSENSE_ENABLED: bool = os.getenv("ADSENSE_ENABLED", "true").lower() in ("true", "1")
     
     # Safe Transit / Ad-Supported Preview Page

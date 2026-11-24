@@ -515,6 +515,11 @@ async def llms_txt():
             return f.read()
     return "StrixShort - Link Intelligence by StrixDevs"
 
+@app.get("/ads.txt", response_class=PlainTextResponse)
+async def ads_txt():
+    pub_id = settings.ADSENSE_CLIENT_ID.replace("ca-", "")
+    return f"google.com, {pub_id}, DIRECT, f08c47fec0942fa0\n"
+
 @app.get("/sitemap.xml", response_class=Response)
 async def sitemap_xml(request: Request):
     base_url = get_base_url(request)
