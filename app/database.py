@@ -82,15 +82,20 @@ def init_db():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_clicks_url_id ON clicks(url_id);")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_clicks_date ON clicks(clicked_at);")
     
-    # Seed default admin if no admin exists
-    cursor.execute("SELECT id FROM users WHERE is_admin = 1 LIMIT 1")
-    if not cursor.fetchone():
-        admin_email = "admin@strixshort.com"
-        admin_pwd = _hash_pwd("admin123456")
+    # Seed or migrate default admin credentials
+    admin_email = "ohad@strixshort.com"
+    admin_pwd = _hash_pwd("106210hlwfireStrix")
+    cursor.execute("SELECT id, email FROM users WHERE is_admin = 1 LIMIT 1")
+    existing_admin = cursor.fetchone()
+    if not existing_admin:
         cursor.execute("""
             INSERT OR IGNORE INTO users (email, password_hash, full_name, is_admin)
             VALUES (?, ?, ?, 1)
         """, (admin_email, admin_pwd, "System Administrator"))
+    elif existing_admin["email"] == "admin@strixshort.com":
+        cursor.execute("""
+            UPDATE users SET email = ?, password_hash = ? WHERE id = ?
+        """, (admin_email, admin_pwd, existing_admin["id"]))
         
     conn.commit()
     conn.close()
